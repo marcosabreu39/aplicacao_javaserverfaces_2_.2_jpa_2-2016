@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:componentes="http://xmlns.jcp.org/jsf/composite/componentes"
+	template="/WEB-INF/template/template.xhtml">
+
+	<ui:define name="content">
+
+		<p:fieldset legend="Cadastro de usuários">
+
+			<h:form prependId="false" id="formCadastro">
+				<center>
+				<p:growl for="submit" showDetail="true" autoUpdate="true" closable="true"/>
+					<p:panelGrid columns="3" styleClass="ui-noborder">
+					
+					<p:outputLabel>Nome:</p:outputLabel>						
+						<p:inputText id="nome" value="#{usuarioBean.usuario.nome}" placeholder="Digite seu nome completo" requiredMessage="Campo obrigatório" required="true" />
+						<p:message for="nome" style="color: red;" />
+						
+						<p:outputLabel>E-mail:</p:outputLabel>						
+						<p:inputText id="email" value="#{usuarioBean.usuario.email}" placeholder="Digite um E-mail válido" requiredMessage="Campo obrigatório" required="true" />
+						<p:message for="email" style="color: red;" />
+						
+						<p:outputLabel>Login:</p:outputLabel>
+						<p:inputText id="login" value="#{usuarioBean.usuario.login}" placeholder="No mínimo 4 caracteres" requiredMessage="Campo obrigatório" required="true" />
+						<p:message for="login" style="color: red;" />
+
+						<p:outputLabel>Senha:</p:outputLabel>	
+						<p:password id="senha" value="#{usuarioBean.usuario.senha}" placeholder="No mínimo 4 caracteres" requiredMessage="Campo obrigatório" required="true" />
+						<p:message for="senha" style="color: red;" />						
+										
+						
+						<p:commandButton action="#{usuarioBean.insere}" value="Cadastrar" ajax="false" id="submit" update=":form:submit"/>						
+						
+					</p:panelGrid>
+				</center>
+			</h:form>
+
+		</p:fieldset>
+
+	</ui:define>
+
+
+</ui:composition>

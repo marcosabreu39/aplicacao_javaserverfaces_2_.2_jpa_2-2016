@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:componentes="http://xmlns.jcp.org/jsf/composite/componentes"
+	template="/WEB-INF/template/template.xhtml">
+
+	<ui:define name="content">
+
+		<p:fieldset legend="Cadastro de Contatos">
+
+			<h:form prependId="false" id="formCadContato">
+				<center>
+				<p:growl id="msgs" for="submit" showDetail="true" autoUpdate="true" closable="true"/>
+					<p:panelGrid columns="3" styleClass="ui-noborder">
+					
+					<p:outputLabel>Nome:</p:outputLabel>						
+						<p:inputText id="nome" value="#{contatoBean.contato.nome}" placeholder="Nome (obrigatório)" requiredMessage="Campo obrigatório" required="true" />
+						<p:message for="nome" style="color: red;" />
+						
+						<p:outputLabel>E-mail:</p:outputLabel>						
+						<p:inputText id="email" value="#{contatoBean.contato.email}" placeholder="E-mail (obrigatório)" requiredMessage="Campo obrigatório" required="true" />
+						<p:message for="email" style="color: red;" />
+						
+						<p:outputLabel>Endereço:</p:outputLabel>
+						<p:inputText id="endereco" value="#{contatoBean.contato.endereco}" placeholder="Endereço do contato" />
+						<p:message for="endereco" style="color: red;" />
+
+						<p:outputLabel>Telefone:</p:outputLabel>	
+						<p:inputText id="telefone" value="#{contatoBean.contato.telefone}" placeholder="Telefone do contato" />
+						<p:message for="telefone" style="color: red;" />
+						
+						<p:outputLabel>Celular:</p:outputLabel>	
+						<p:inputText id="celular" value="#{contatoBean.contato.celular}" placeholder="Celular (obrigatório)" />
+						<p:message for="celular" style="color: red;" />						
+						
+						<p:outputLabel>Observação:</p:outputLabel>
+						<p:inputTextarea id="observacao" value="#{contatoBean.contato.observacao}"  rows="5" placeholder="Informações adicionais"/>				
+						<p:message for="observacao" style="color: red;" />
+						
+						<p:commandButton action="#{contatoBean.insere}" value="Cadastrar" ajax="false" id="submit" update=":form:submit" />						
+						
+					</p:panelGrid>
+				</center>
+			</h:form>
+
+		</p:fieldset>
+
+	</ui:define>
+
+
+</ui:composition>

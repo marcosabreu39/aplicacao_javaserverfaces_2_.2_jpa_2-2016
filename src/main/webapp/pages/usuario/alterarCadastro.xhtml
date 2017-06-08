@@ -1,0 +1,115 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:componentes="http://xmlns.jcp.org/jsf/composite/componentes"
+	template="/WEB-INF/template/template.xhtml">
+
+	<ui:define name="content">
+
+		<p:fieldset legend="Alterar Cadastro">			
+		
+		<h:form id="formMsg" prependId="false">			
+			<p:growl for="atualizar" showDetail="true" id="msgAtualizar" />
+		</h:form>				
+	
+		<h:form id="formPrimeiraAcao" prependId="false">
+		<p:remoteCommand id="listarAoCarregar"  actionListener="#{usuarioBean.popularUsuario()}" update=":formDetalhesUsuario" autoRun="true"/>
+		</h:form>
+	
+			<h:form id="formDetalhesUsuario">
+				<center>								
+	
+				<p:panelGrid id="detalhesDoUsuario" columns="2" rendered="#{not empty usuarioBean.usuario}" >
+				
+					<f:facet name="header">Dados Cadastrais</f:facet>
+									
+						<p:outputLabel value="Nome" for="nome" />
+						<h:outputText value="#{usuarioBean.usuario.nome}" id="nome" />
+						
+						<p:outputLabel value="E-mail" for="email" />
+						<h:outputText value="#{usuarioBean.usuario.email}" id="email" />
+						
+						<p:outputLabel value="Login" for="login" />
+						<h:outputText value="#{usuarioBean.usuario.login}" id="login" />
+						
+						<p:outputLabel value="Senha" for="senha" />
+						<h:outputText value="**************" id="senha" />
+												
+						<p:outputLabel value="Data do Cadastro" for="data" />
+						<h:outputText value="#{usuarioBean.usuario.dataCadastro}" id="data">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" dateStyle="long" timeZone="Brazil/East" />
+						</h:outputText>		
+												
+					<f:facet name="footer">
+						<p:menubar rendered="#{not empty usuarioBean.usuario}">		
+											
+							<p:menuitem value="Editar meus Dados Cadastrais" icon="fa fa-pencil" action="#{usuarioBean.popularUsuarioParaEditar(usuarioBean.usuario)}" update="formDetalhesUsuario :formEditarUsuario" />
+						
+						</p:menubar>
+					</f:facet>
+
+				</p:panelGrid>				
+				
+				</center>
+				
+			</h:form>				
+			
+			<h:form id="formEditarUsuario">			
+
+				<center>
+
+				<p:panelGrid id="editarUsuario" columns="3" rendered="#{not empty usuarioBean.usuarioParaEditar}" styleClass="ui-noborder">
+					<f:facet name="header">Editar Dados Cadastrais</f:facet>
+									
+						<p:outputLabel value="Nome" for="nome" />
+						<p:inputText value="#{usuarioBean.usuarioParaEditar.nome}" id="nome" />
+						<p:message for="nome" style="color: red;" />
+						
+						<p:outputLabel value="E-mail" for="email" />
+						<p:inputText value="#{usuarioBean.usuarioParaEditar.email}" id="email" />
+						<p:message for="email" style="color: red;" />
+						
+						<p:outputLabel value="Login" for="login" />
+						<p:inputText value="#{usuarioBean.usuarioParaEditar.login}" id="login" />
+						<p:message for="login" style="color: red;" />
+						
+						<p:outputLabel value="Senha" for="senha" />						
+						<p:password value="#{usuarioBean.usuarioParaEditar.senha}" id="senhaOculta" rendered="#{!usuarioBean.senha}" />						
+						<p:message for="senhaOculta" style="color: red;" rendered="#{!usuarioBean.senha}" />
+						
+						<p:inputText value="#{usuarioBean.usuarioParaEditar.senha}" id="senha" rendered="#{usuarioBean.senha}" />						
+						<p:message for="senha" style="color: red;" rendered="#{usuarioBean.senha}" />										
+						
+					<f:facet name="footer">
+						<p:menubar rendered="#{not empty usuarioBean.usuarioParaEditar}">
+							<p:menuitem value="Voltar" icon="fa fa-reply" url="/pages/usuario/alterarCadastro.jsf" />
+							 <p:menuitem value="Salvar Alterações" icon="fa fa-floppy-o" action="#{usuarioBean.atualizarUsuario()}" update=":formDetalhesUsuario :formEditarUsuario :formMsg" id="atualizar" >							
+							 <p:confirm header="Alterar Dados Cadastrais" message="Confirma essa ação?" icon="ui-icon-alert" />								
+							 </p:menuitem>
+									
+							<p:menuitem actionListener="#{usuarioBean.exibirSenha(false)}" update="formEditarUsuario" value="Ocultar Senha" id="psswd" icon="fa fa-eye-slash" rendered="#{usuarioBean.senha}" />
+							<p:menuitem actionListener="#{usuarioBean.exibirSenha(true)}" update="formEditarUsuario" value="Ver a Senha" id="ocultPsswd" icon="fa fa-eye" rendered="#{!usuarioBean.senha}" />
+										
+						</p:menubar>
+						
+						</f:facet>					
+
+				</p:panelGrid>
+				
+				</center>
+				
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        		<p:commandButton value="Atualizar" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        		<p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+    			</p:confirmDialog>
+			
+			</h:form>
+
+		</p:fieldset>
+
+	</ui:define>
+
+
+</ui:composition>

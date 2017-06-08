@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:componentes="http://xmlns.jcp.org/jsf/composite/componentes"
+	template="/WEB-INF/template/template.xhtml">
+
+	<ui:define name="content">
+
+		<p:fieldset legend="Login de usuários">
+
+			<h:form prependId="false" id="formLogin">
+				<center>
+				<p:growl for="acessa" showDetail="true" autoUpdate="true" closable="true"/>
+					<p:panelGrid columns="3" styleClass="ui-noborder">						
+						<p:outputLabel>Login:</p:outputLabel>
+						<p:inputText id="login" value="#{usuarioBean.usuario.login}" placeholder="Entre com o seu login." />
+						<p:message for="login" style="color: red;"/>
+						
+						
+						<p:outputLabel>Senha:</p:outputLabel>
+						<p:password id="senha" value="#{usuarioBean.usuario.senha}" placeholder="Entre com a sua senha." />
+						<p:message for="senha" />
+						<p:commandButton action="#{usuarioBean.acessa()}" value="entrar" id="acessa" ajax="false" update=":sub2">
+						<p:ajax render=":navheader:navbar"/>
+						</p:commandButton>						
+					</p:panelGrid>
+				</center>
+			</h:form>
+
+		</p:fieldset>
+
+	</ui:define>
+
+
+</ui:composition>

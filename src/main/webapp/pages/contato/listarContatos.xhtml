@@ -1,0 +1,246 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:componentes="http://xmlns.jcp.org/jsf/composite/componentes"
+	template="/WEB-INF/template/template.xhtml">
+
+	<ui:define name="content">
+
+		<p:fieldset legend="Contatos Cadastrados">
+
+		<!-- <h:form id="msgNenhumContato">
+		<p:remoteCommand action="#{contatoBean.msgNenhumContato()}" update=":msgSemContatos"  />			
+		</h:form> -->		
+			
+		<h:form id="msgSemContatos" prependId="false">		
+		<center>
+		<h3>			
+			<p:messages id="msgEmpty" for="formPrimeiraAcao" rendered="#{empty contatoBean.contatosPorNome and empty contatoBean.contatosPorData and empty contatoBean.contatoSelecionado and empty contatoBean.contatoParaAtualizar}" />
+		</h3>
+		</center>		
+		</h:form>
+		
+		<h:form id="formMsg" prependId="false">			
+			<p:growl for="excluir" showDetail="true" id="msgExcluido" />
+		</h:form>
+			 
+			<h:form id="formPrimeiraAcao" prependId="false">
+				<p:remoteCommand name="primeiraListagem" id="listarAoCarregar" actionListener="#{contatoBean.popularContatosPorNome()}"
+					update=":formContatosPorNome :formContatosPorData :msgSemContatos" autoRun="true" />
+			</h:form>					
+
+			<h:form id="formContatosPorNome">					
+ 
+				<p:dataTable value="#{contatoBean.contatosPorNome}" var="contato" id="contatosPorNome" rendered="#{not empty contatoBean.contatosPorNome}">
+								
+				<f:facet name="header">			
+				<p:menuButton value="Ordenado em ordem alfabética">						
+						<p:menuitem value="Pela data de cadastro" action="#{contatoBean.popularContatosPorData()}" update=":formContatosPorData :formContatosPorNome" />
+				</p:menuButton>																
+				</f:facet>
+				
+					<p:column style="text-align: center;" width="40%">
+					
+						<f:facet name="header">Nome do Contato</f:facet>
+					
+						<h:outputText value="#{contato.nome}" />
+					</p:column>
+
+					<p:column style="text-align: center;" width="30%">
+					
+					<f:facet name="header">Data do Cadastro</f:facet>
+					
+						<h:outputText value="#{contato.dataCadastro}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" dateStyle="long" timeZone="Brazil/East" />
+						</h:outputText>
+					</p:column>
+
+					<p:column width="10%" style="text-align: center;">
+					
+						<f:facet name="header">Menu</f:facet>
+						<p:menuButton value="Ações">
+							<p:menuitem value="Selecionar Contato" icon="fa fa-eye" action="#{contatoBean.obterContatoEspecifico(contato)}" update=":formDetalhesContato :formContatosPorNome" />
+							<p:menuitem value="Editar Contato" icon="fa fa-pencil" action="#{contatoBean.retornarContatoParaEditar(contato)}" update=":formEditarContato :formContatosPorNome" />
+							<p:menuitem value="Excluir Contato" icon="fa fa-trash-o" action="#{contatoBean.excluirContato(contato)}" update=":formPrimeiraAcao :msgExcluido" id="excluir">
+							 <!-- <f:ajax listener="#{contatoBean.excluirContato(contato)}"  immediate=":listarAoCarregar" /> -->
+							<p:confirm header="Excluir Contato" message="Confirma essa ação?" icon="ui-icon-alert" />							
+							</p:menuitem>
+						</p:menuButton>
+					</p:column>
+				<f:facet name="footer">
+				<p:outputLabel value="Total de contatos cadastrados: #{contatoBean.contatosPorNome.size()}" />
+				</f:facet>
+				</p:dataTable>
+				
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        		<p:commandButton value="Excluir" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        		<p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+    			</p:confirmDialog>
+
+			</h:form>
+
+			<h:form id="formContatosPorData">
+				<p:dataTable value="#{contatoBean.contatosPorData}" var="contato" id="contatosPorData" rendered="#{not empty contatoBean.contatosPorData}">
+				
+				<f:facet name="header">
+				<p:menuButton value="Ordenado pela data de cadastro">						
+						<p:menuitem value="Em ordem alfabética" action="#{contatoBean.popularContatosPorNome()}" update=":formContatosPorData :formContatosPorNome" />
+				</p:menuButton>
+				</f:facet>
+					
+					<p:column style="text-align: center;" width="30%">
+					
+						<f:facet name="header">Data do Cadastro</f:facet>
+						
+						<h:outputText value="#{contato.dataCadastro}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" dateStyle="long" timeZone="Brazil/East" />
+						</h:outputText>
+					</p:column>
+
+					<p:column style="text-align: center;" width="40%">
+						<f:facet name="header">Nome do Contato</f:facet>
+						<h:outputText value="#{contato.nome}" />
+					</p:column>
+
+					<p:column width="10%" style="text-align: center;">
+					
+						<f:facet name="header">Menu</f:facet>
+						
+						<p:menuButton value="Ações">
+							<p:menuitem value="Selecionar Contato" icon="fa fa-eye" action="#{contatoBean.obterContatoEspecifico(contato)}" update=":formDetalhesContato :formContatosPorData" />
+							<p:menuitem value="Editar Contato" icon="fa fa-pencil" action="#{contatoBean.retornarContatoParaEditar(contato)}" update=":formEditarContato :formContatosPorData" />
+							<p:menuitem value="Excluir Contato" icon="fa fa-trash-o" action="#{contatoBean.excluirContato(contato)}" update=":formPrimeiraAcao :msgExcluido" id="excluir" >
+							<p:confirm header="Excluir Contato" message="Confirma essa ação?" icon="ui-icon-alert" />
+							</p:menuitem>
+						</p:menuButton>
+					</p:column>
+
+				<f:facet name="footer">				
+				<p:outputLabel value="Total de contatos cadastrados: #{contatoBean.contatosPorData.size()}" />
+				</f:facet>
+
+				</p:dataTable>
+				
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        		<p:commandButton value="Excluir" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        		<p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+    			</p:confirmDialog>
+			
+			</h:form>	
+	
+			<h:form id="formDetalhesContato">
+				<center>
+				<p:growl for="salvar" showDetail="true" autoUpdate="true" closable="false" />
+	
+				<p:panelGrid id="detalhesDoContato" columns="2" rendered="#{not empty contatoBean.contatoSelecionado}" >
+				
+					<f:facet name="header">Detalhes do Contato</f:facet>
+									
+						<p:outputLabel value="Nome" for="nome" />
+						<h:outputText value="#{contatoBean.contatoSelecionado.nome}" id="nome" />
+						
+						<p:outputLabel value="E-mail" for="email" />
+						<h:outputText value="#{contatoBean.contatoSelecionado.email}" id="email" />
+						
+						<p:outputLabel value="Endereço" rendered="#{not empty contatoBean.contatoSelecionado.endereco}" for="endereco" />
+						<h:outputText value="#{contatoBean.contatoSelecionado.endereco}" rendered="#{not empty contatoBean.contatoSelecionado.endereco}" id="endereco" />
+						
+						<p:outputLabel value="Telefone" rendered="#{not empty contatoBean.contatoSelecionado.telefone}" for="telefone" />
+						<h:outputText value="#{contatoBean.contatoSelecionado.telefone}" rendered="#{not empty contatoBean.contatoSelecionado.telefone}" id="telefone" />
+						
+						<p:outputLabel value="Celular" for="celular" />
+						<h:outputText value="#{contatoBean.contatoSelecionado.celular}" id="celular" />
+						
+						<p:outputLabel value="Data do Cadastro" for="data" />
+						<h:outputText value="#{contatoBean.contatoSelecionado.dataCadastro}" id="data">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" dateStyle="long" timeZone="Brazil/East" />
+						</h:outputText>
+						
+						<p:outputLabel value="Observação" rendered="#{not empty contatoBean.contatoSelecionado.observacao}" for="obs" />						
+						<h:outputText value="#{contatoBean.contatoSelecionado.observacao}" rendered="#{not empty contatoBean.contatoSelecionado.observacao}" id="obs" />				
+
+					<f:facet name="footer">
+						<p:menubar rendered="#{not empty contatoBean.contato}">
+							<p:menuitem value="Voltar" icon="fa fa-reply" url="/pages/contato/listarContatos.jsf" />
+							<p:menuitem value="Editar Contato" icon="fa fa-pencil" action="#{contatoBean.retornarContatoParaEditar(contatoBean.contatoSelecionado)}" update=":formEditarContato :formDetalhesContato" />
+							<p:menuitem value="Excluir Contato" icon="fa fa-trash-o" action="#{contatoBean.excluirContato(contatoBean.contatoSelecionado)}" update="formDetalhesContato :formPrimeiraAcao :msgExcluido" id="excluir" >
+							<p:confirm header="Excluir Contato" message="Confirma essa ação?" icon="ui-icon-alert" />
+							</p:menuitem>
+						</p:menubar>
+					</f:facet>
+
+				</p:panelGrid>
+				
+				</center>
+				
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        		<p:commandButton value="Excluir" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        		<p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+    			</p:confirmDialog>
+
+			</h:form>				
+			
+			<h:form id="formEditarContato">			
+
+				<p:panelGrid id="editarContato" columns="3" rendered="#{not empty contatoBean.contatoParaAtualizar}" style="margin: 0 auto;" styleClass="ui-noborder">
+					<f:facet name="header">Editar Contato</f:facet>
+									
+						<p:outputLabel value="Nome" for="nome" />
+						<p:inputText value="#{contatoBean.contatoParaAtualizar.nome}"  id="nome" />
+						<p:message for="nome" style="color: red;" />
+						
+						<p:outputLabel value="E-mail" for="email" />
+						<p:inputText value="#{contatoBean.contatoParaAtualizar.email}" id="email" />
+						<p:message for="email" style="color: red;" />
+						
+						<p:outputLabel value="Endereço" for="endereco" />
+						<p:inputText value="#{contatoBean.contatoParaAtualizar.endereco}" id="endereco" />
+						<p:message for="endereco" style="color: red;" />
+						
+						<p:outputLabel value="Telefone" for="telefone" />
+						<p:inputText value="#{contatoBean.contatoParaAtualizar.telefone}" id="telefone" />
+						<p:message for="telefone" style="color: red;" />
+						
+						<p:outputLabel value="Celular" for="celular" />
+						<p:inputText value="#{contatoBean.contatoParaAtualizar.celular}" id="celular" />
+						<p:message for="celular" style="color: red;" />
+						
+						<p:outputLabel value="Data do Cadastro" for="data" />
+						<h:outputText value="#{contatoBean.contatoParaAtualizar.dataCadastro}" id="data">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" dateStyle="long" timeZone="Brazil/East" />
+						</h:outputText>		
+						<p:message for="data" style="color: red;" />				
+						
+						<p:outputLabel value="Observação" for="obs" />						
+						<p:inputTextarea value="#{contatoBean.contatoParaAtualizar.observacao}" id="obs" />				
+						<p:message for="obs" style="color: red;" />
+
+					<f:facet name="footer">
+						<p:menubar rendered="#{not empty contatoBean.contato}">
+							<p:menuitem value="Voltar" icon="fa fa-reply" url="/pages/contato/listarContatos.jsf" />
+							<p:menuitem value="Salvar alterações" icon="fa fa-floppy-o" action="#{contatoBean.atualizarContato(contatoBean.contatoParaAtualizar)}" update="formEditarContato :formDetalhesContato" id="salvar" />
+							<p:menuitem value="Excluir Contato" icon="fa fa-trash-o" action="#{contatoBean.excluirContato(contatoBean.contatoParaAtualizar)}" update="formEditarContato :formPrimeiraAcao :msgExcluido" id="excluir">
+							<p:confirm header="Excluir Contato" message="Confirma essa ação?" icon="ui-icon-alert" />
+							</p:menuitem>							
+							
+						</p:menubar>
+					</f:facet>
+
+				</p:panelGrid>
+				
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        		<p:commandButton value="Excluir" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        		<p:commandButton value="Cancelar" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+    			</p:confirmDialog>
+			
+			</h:form>
+
+		</p:fieldset>
+
+	</ui:define>
+
+
+</ui:composition>
