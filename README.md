@@ -7,7 +7,7 @@
 * JavaServer Faces 2.2; 
 * JPA 2 com Hibernate 5; 
 * Enterprise Javabeans 3;
-* PRIMEFACES; 
+* Primefaces 5; 
 * Banco de dados Oracle 11G;
 * Servidor de Aplicação Wildfly 10; 
 * IDE Eclipse Neon.
