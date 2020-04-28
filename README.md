@@ -5,8 +5,8 @@
 * Arquitetura MVC;
 * Maven;
 * JavaServer Faces 2.2; 
-* JPA 2 com Hibernate; 
-* ENTERPRISE JAVABEANS 3;
+* JPA 2 com Hibernate 5; 
+* Enterprise Javabeans 3;
 * PRIMEFACES; 
 * Banco de dados Oracle 11G;
 * Servidor de Aplicação Wildfly 10; 
