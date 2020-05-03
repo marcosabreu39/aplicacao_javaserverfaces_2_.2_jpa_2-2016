@@ -3,11 +3,12 @@
 ## Tecnologias
 
 * Arquitetura MVC;
-* Maven;
-* JavaServer Faces 2.2; 
+* Design Pattern DAO;
+* JavaServer Faces 2.2;
+* Primefaces 5;
 * JPA 2 com Hibernate 5; 
-* Enterprise Javabeans 3;
-* Primefaces 5; 
+* Enterprise Javabeans 3; 
+* Maven;
 * Banco de dados Oracle 11G;
 * Servidor de Aplicação Wildfly 10; 
 * IDE Eclipse Neon.
