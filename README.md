@@ -1,4 +1,4 @@
-# AgendaJsfJpa
+# Agenda com JSF e JPA
 
 ## Tecnologias
 
